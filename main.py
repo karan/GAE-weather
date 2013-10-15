@@ -1,25 +1,33 @@
 #!/usr/bin/env python
-#
-# Copyright 2007 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+
 import webapp2
+from urllib2 import urlopen
+import json
+
+FORM = """
+<html>
+<head></head>
+<form method="get" action="/weather">
+<input type="text" cols="10" name="zip">
+<input type="submit" value="How's it?">
+</form>
+</html>
+"""
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Hello world!')
+        self.response.write(FORM)
+
+class WeatherHandler(webapp2.RequestHandler):
+    def get(self):
+        url = 'http://api.openweathermap.org/data/2.5/weather?q=%s' \
+              % self.request.get('zip')
+        data = json.load(urlopen(url))
+        self.response.write('<p>%s - %s</p>' % (data["weather"][0]["main"], data["weather"][0]["description"]))
+        self.response.write('<p>Temp: %d C</br>Humidity: %s</p>' % (data["main"]["temp"] - 273, data["main"]["humidity"]))
+        self.response.write('<p>%s - %s</p>' % (data["name"], data["sys"]["country"]))
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/weather', WeatherHandler)
 ], debug=True)
