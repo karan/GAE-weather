@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Check Weather with Zip Code.</title>
+<meta name="description" content="Check the Weather of State using Zip-Code including Temperature and Humidity.">
+</head>
+<body>
+<div id="wrap">
+
+<h1>Check Weather by Zip Code</h1>
+
+<form name="myform" method="get" action="/weather">
+<input type="text" onfocus="if (this.value == '10007') {this.value = '';}" onblur="if (this.value == '')
+         {this.value = '10007';}" value='10007' size="10" name="zip" id="zip"/> 
+         <br /><br /><a href="/" onclick="document.forms['myform'].submit(); return false;">How's it?</a>
+</form>
+</div>
+</body>
+</html>
